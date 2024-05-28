@@ -1,6 +1,6 @@
-package com.example.spring_data_jpa.repository;
+package com.example.spring_boot_demo.repository;
 
-import com.example.spring_data_jpa.entity.StudentEntity;
+import com.example.spring_boot_demo.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

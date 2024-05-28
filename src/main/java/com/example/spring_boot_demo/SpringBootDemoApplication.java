@@ -1,19 +1,19 @@
-package com.example.spring_data_jpa;
+package com.example.spring_boot_demo;
 
-import com.example.spring_data_jpa.entity.StudentEntity;
-import com.example.spring_data_jpa.repository.StudentRepository;
+import com.example.spring_boot_demo.entity.StudentEntity;
+import com.example.spring_boot_demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringDataJpaApplication implements CommandLineRunner {
+public class SpringBootDemoApplication implements CommandLineRunner {
 
 	@Autowired
 	StudentRepository studentRepository;
 	public static void main(String[] args) {
-		SpringApplication.run(SpringDataJpaApplication.class, args);
+		SpringApplication.run(SpringBootDemoApplication.class, args);
 	}
 
 	@Override
