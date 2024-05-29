@@ -1,6 +1,7 @@
 package com.example.spring_boot_demo.controller;
 
 import com.example.spring_boot_demo.entity.StudentEntity;
+import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/students")
+@BasePathAwareController(path = "/students")
 public class StudentController extends BaseController {
 
     @GetMapping
