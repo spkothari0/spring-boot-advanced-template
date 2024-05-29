@@ -1,8 +1,7 @@
 package com.example.spring_boot_demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Data
 @Entity(name = "Student")
@@ -12,23 +11,28 @@ import java.util.UUID;
         })
 public class StudentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "student_seq",
+            sequenceName = "student_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq")
     @Column(name = "studentId", updatable = false, nullable = false)
-    private UUID id;
+    private Long id;
     @Column(name = "firstName", nullable = false, columnDefinition = "VarChar(255)")
     private String firstName;
     @Column(name = "lastName", nullable = false, columnDefinition = "VarChar(255)")
     private String lastName;
     @Column(name = "email", nullable = false, columnDefinition = "VarChar(255)")
     private String email;
-    @Column(name="age")
-    private int age;
+    @Column(name="dateOfBirth")
+    private LocalDate dob=LocalDate.now();
 
-    public StudentEntity(String firstName, String lastName, String email, int age) {
+    public StudentEntity(String firstName, String lastName, String email, LocalDate dob) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.age = age;
+        this.dob = dob;
     }
 
     public StudentEntity() { }

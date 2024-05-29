@@ -1,0 +1,21 @@
+meta {
+  name: Get By ID
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/students/60
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "dob": "1990-01-01"
+  }
+  
+}
