@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     List<StudentEntity> findByFirstName(String name);
-    List<StudentEntity> findByEmail(String email);
+
+    StudentEntity findByEmail(String email);
 }

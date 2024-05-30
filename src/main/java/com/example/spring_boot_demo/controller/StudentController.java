@@ -1,98 +1,85 @@
 package com.example.spring_boot_demo.controller;
 
-import com.example.spring_boot_demo.entity.StudentEntity;
+import com.example.spring_boot_demo.business.bean.StudentBean;
+import com.example.spring_boot_demo.service.IStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @BasePathAwareController(path = "/students")
 public class StudentController extends BaseController {
 
-    @GetMapping
-    public List<StudentEntity> getStudents() {
-        return studentRepository.findAll();
+    @Autowired
+    private IStudentService studentService;
+
+    public StudentController(IStudentService studentService) {
+        this.studentService = studentService;
     }
 
-    // get a student by id
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<StudentBean>>> getStudents() {
+        List<StudentBean> students = studentService.getAllStudents();
+        if (students == null || students.isEmpty())
+            return noContentResponse();
+        return paginatedResponse(students, 0, 2, students.size());
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
-        Optional<StudentEntity> studentEntity = studentRepository.findById(id);
-        if (studentEntity.isPresent()) {
-            return ResponseEntity.ok(studentEntity.get());
-        }
-        else
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<ApiResponse<StudentBean>> getStudentById(@PathVariable Long id) {
+        StudentBean student = studentService.getStudentById(id);
+        if (student == null)
+            return notFoundResponse("Student not found");
+        return successResponse(student);
     }
 
-    // get a student by email
     @GetMapping("/email/{email}")
-    public ResponseEntity<StudentEntity> getStudentByEmail(@PathVariable String email) {
-        Optional<StudentEntity> studentEntity = studentRepository.findByEmail(email).stream().findAny();
-        if (studentEntity.isPresent()) {
-            return ResponseEntity.ok(studentEntity.get());
-        }
-        else
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<ApiResponse<StudentBean>> getStudentByEmail(@PathVariable String email) {
+        StudentBean student = studentService.getStudentByEmail(email);
+        if (student == null)
+            return notFoundResponse("Student not found");
+        return successResponse(student);
     }
 
-    // get a student by name
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<StudentEntity>> getStudentByName(@PathVariable String name) {
-        List<StudentEntity> students = studentRepository.findByFirstName(name);
-        if (!students.isEmpty()) {
-            return ResponseEntity.ok(students);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponse<List<StudentBean>>> getStudentByFirstName(@PathVariable String name) {
+        List<StudentBean> students = studentService.getStudentByName(name);
+        if (students == null)
+            return notFoundResponse("Students not found");
+        return paginatedResponse(students, 0, students.size(), students.size());
     }
 
-
-    // create a student
     @PostMapping
-    public ResponseEntity<StudentEntity> createStudent(@RequestBody StudentEntity studentEntity) {
-        Optional<StudentEntity> optionalStudent=studentRepository.findByEmail(studentEntity.getEmail()).stream().findAny();
-        StudentEntity student;
-        if (optionalStudent.isPresent()) {
-            System.out.println("The student with email:"+studentEntity.getEmail()+" already exists!");
-            return ResponseEntity.badRequest().build();
-        }
-        else{
-            student = studentRepository.save(studentEntity);
-            return ResponseEntity.ok(student);
-        }
+    public ResponseEntity<ApiResponse<StudentBean>> createStudent(@RequestBody StudentBean StudentBean) {
+        StudentBean createdStudent = studentService.createStudent(StudentBean);
+        if (createdStudent == null)
+            return errorResponse("Student with same email already exists");
+        return createdResponse(createdStudent);
     }
 
-    // update a student
     @PutMapping("/{id}")
-    public ResponseEntity<StudentEntity> updateStudent(@PathVariable Long id,@RequestBody StudentEntity studentEntity) {
-        Optional<StudentEntity> optionalStudent = studentRepository.findById(id);
-        if (optionalStudent.isPresent()) {
-            StudentEntity student = optionalStudent.get();
-            student.setFirstName(studentEntity.getFirstName());
-            student.setLastName(studentEntity.getLastName());
-            student.setEmail(studentEntity.getEmail());
-            student.setDob(studentEntity.getDob());
+    public ResponseEntity<ApiResponse<StudentBean>> updateStudent(@PathVariable Long id, @RequestBody StudentBean studentBean) {
+        Boolean isValidId = studentService.getStudentById(id) != null;
 
-            return ResponseEntity.ok(studentRepository.save(student));
+        if (isValidId) {
+            studentBean.setId(id);
+            StudentBean updatedStudent = studentService.updateStudent(studentBean);
+            return successResponse(updatedStudent);
+        } else {
+            return notFoundResponse("Student not found");
         }
-        else
-            return ResponseEntity.notFound().build();
     }
 
-    // delete a student
     @DeleteMapping("/{id}")
-    public ResponseEntity<StudentEntity> deleteStudent(@PathVariable Long id) {
-        Optional<StudentEntity> optionalStudent = studentRepository.findById(id);
-        if (optionalStudent.isPresent()) {
-            studentRepository.delete(optionalStudent.get());
-            return ResponseEntity.ok().build();
+    public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable Long id) {
+        Boolean isDeleted = studentService.deleteStudent(id);
+        if (isDeleted) {
+            return successResponse("Student deleted successfully");
+        } else {
+            return notFoundResponse("Student not found");
         }
-        else
-            return ResponseEntity.notFound().build();
     }
-
 }
