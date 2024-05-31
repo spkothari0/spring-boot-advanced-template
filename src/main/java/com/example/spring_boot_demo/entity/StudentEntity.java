@@ -1,6 +1,8 @@
 package com.example.spring_boot_demo.entity;
+
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 @Data
@@ -19,11 +21,11 @@ public class StudentEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq")
     @Column(name = "studentId", updatable = false, nullable = false)
     private Long id;
-    @Column(name = "firstName", nullable = false, columnDefinition = "VarChar(255)")
+    @Column(name = "firstName", nullable = false, columnDefinition = "VarChar(50)")
     private String firstName;
-    @Column(name = "lastName", nullable = false, columnDefinition = "VarChar(255)")
+    @Column(name = "lastName", nullable = false, columnDefinition = "VarChar(50)")
     private String lastName;
-    @Column(name = "email", nullable = false, columnDefinition = "VarChar(255)")
+    @Column(name = "email", nullable = false, columnDefinition = "VarChar(50)")
     private String email;
     @Column(name="dateOfBirth")
     private LocalDate dob=LocalDate.now();

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
+public interface IStudentRepo extends JpaRepository<StudentEntity, Long> {
     List<StudentEntity> findByFirstName(String name);
 
     StudentEntity findByEmail(String email);

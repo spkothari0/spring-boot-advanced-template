@@ -5,32 +5,29 @@ import lombok.Setter;
 import org.springframework.http.HttpStatusCode;
 
 import java.util.List;
-import java.util.Map;
 
 @Setter
 @Getter
-public class ApiResponse<T> {
+public class APIResponse<T> {
     private int statusCode;
     private String status;
     private T data;
     private String message;
-    private Map<String, String> links;
     private List<ErrorDetail> errors;
     private PaginationMetadata pagination;
 
-    public ApiResponse(String status, T data, String message, HttpStatusCode code) {
+    public APIResponse(String status, T data, String message, HttpStatusCode code) {
         this.status = status;
         this.data = data;
         this.message = message;
         this.statusCode = code.value();
     }
 
-    public ApiResponse(String status, T data, String message, HttpStatusCode code, Map<String, String> links, List<ErrorDetail> errors, PaginationMetadata pagination) {
+    public APIResponse(String status, T data, String message, HttpStatusCode code, List<ErrorDetail> errors, PaginationMetadata pagination) {
         this.status = status;
         this.data = data;
         this.message = message;
         this.statusCode = code.value();
-        this.links = links;
         this.errors = errors;
         this.pagination = pagination;
     }

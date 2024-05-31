@@ -3,7 +3,7 @@ package com.example.spring_boot_demo.service;
 import com.example.spring_boot_demo.Utility.GenericBeanMapper;
 import com.example.spring_boot_demo.business.bean.StudentBean;
 import com.example.spring_boot_demo.entity.StudentEntity;
-import com.example.spring_boot_demo.repository.StudentRepository;
+import com.example.spring_boot_demo.repository.IStudentRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Service
 public class StudentService implements IStudentService {
-    private final StudentRepository repository;
+    private final IStudentRepo repository;
 
     @Autowired
-    public StudentService(StudentRepository repository) {
+    public StudentService(IStudentRepo repository) {
         this.repository = repository;
     }
 
@@ -28,11 +28,9 @@ public class StudentService implements IStudentService {
     }
 
     public StudentBean getStudentById(Long id) {
-        StudentBean studentBean;
         Optional<StudentEntity> studentEntity = repository.findById(id);
         if (studentEntity.isPresent()) {
-            studentBean = GenericBeanMapper.map(studentEntity.get(), StudentBean.class);
-            return studentBean;
+            return GenericBeanMapper.map(studentEntity.get(), StudentBean.class);
         } else
             return null;
     }
