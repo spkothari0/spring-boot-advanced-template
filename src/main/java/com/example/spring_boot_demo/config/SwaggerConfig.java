@@ -19,17 +19,6 @@ public class SwaggerConfig {
                 .packagesToScan("com.example.spring_boot_demo.controller") // Specify your controllers' package
                 .build();
     }
-
-    @Bean
-    public OpenApiCustomizer openApiCustomiser() {
-        return openApi -> {
-            Paths paths = openApi.getPaths();
-            paths.keySet().removeIf
-                    (path -> path.matches("/profile.*") ||
-                            path.matches("/studentEntities.*") ||
-                            path.matches("/.*search.*"));
-        };
-    }
 }
 
 
