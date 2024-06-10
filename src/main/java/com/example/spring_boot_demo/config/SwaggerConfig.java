@@ -9,7 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Spring Boot Demo", version = "1.0"))
+@OpenAPIDefinition(info = @Info(
+        title = "Spring Boot Demo",
+        version = "1.0",
+        description = "API documentation for Spring Boot Demo project",
+        contact = @io.swagger.v3.oas.annotations.info.Contact(name = "Shreyas Kothari", email = "spkothari968@gmail.com"),
+        license = @io.swagger.v3.oas.annotations.info.License(name = "Apache 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0.html")
+))
 public class SwaggerConfig {
 
     @Bean
