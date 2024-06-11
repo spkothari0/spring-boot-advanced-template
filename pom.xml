@@ -8,7 +8,7 @@
 		<version>3.2.7-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.shreyas</groupId>
 	<artifactId>spring-boot-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Spring Boot Demo</name>
@@ -64,6 +64,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<mainClass>com.shreyas.spring_boot_demo.SpringBootDemoApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
