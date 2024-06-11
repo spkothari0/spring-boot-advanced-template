@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +26,22 @@ public class GlobalExceptionHandler extends Exception {
         logger.error("Exception occurred: {}", e.getMessage(), e);
         APIResponse<String> response = new APIResponse<>("ERROR", null, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public ResponseEntity<APIResponse<String>> handleAccessDeniedException(AccessDeniedException ex) {
+        logger.error("AccessDeniedException occurred: {}", ex.getMessage(), ex);
+        APIResponse<String> response = new APIResponse<>("Forbidden", null, ex.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    public ResponseEntity<APIResponse<String>> handleAutherizationException(AuthenticationException ex) {
+        logger.error("AuthenticationException occurred: {}", ex.getMessage(),ex);
+        APIResponse<String> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
