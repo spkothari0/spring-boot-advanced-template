@@ -13,8 +13,10 @@ import java.time.LocalDate;
 public class StudentBean {
     private Long id;
     @Length(min = 3, max = 20, message = "First name must be between 3 to 20 characters")
+    @NotNull(message = "First name must be not null")
     private String firstName;
     @Length(min = 3, max = 20, message = "Last name must be between 3 to 20 characters")
+    @NotNull(message = "Last name must be not null")
     private String lastName;
     @NotNull(message = "Email cannot be null")
     @Email(message = "Email is not valid")

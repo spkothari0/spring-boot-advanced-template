@@ -1,77 +1,68 @@
 package com.shreyas.spring_boot_demo.config;
 
-import javax.sql.DataSource;
+import com.shreyas.spring_boot_demo.jwt.AuthEntryPointJwt;
+import com.shreyas.spring_boot_demo.jwt.AuthTokenFilter;
+import com.shreyas.spring_boot_demo.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    public static final String SECRET = "SecretKeyToGenJWTs";
-    public static final long EXPIRATION_TIME = 864_000_000; // 10 days
-    public static final String TOKEN_PREFIX = "Bearer ";
-
-    final DataSource dataSource;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
-    public SecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
+        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
-//        http.formLogin(withDefaults());
-        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.httpBasic(withDefaults());
+    public AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils,UserDetailsService userService) {
+        return new AuthTokenFilter(jwtUtils, userService);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
+        http.authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api/v1/auth/**").permitAll() // Allow all requests to /api/v1/auth/**
+                        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Allow access to Swagger UI
+                        .anyRequest().authenticated())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+        .headers(headers -> headers
+                .frameOptions(options ->
+                        options.sameOrigin()
+                )
+        )
+        .csrf(csrf -> csrf.disable())
+        // add our custom JWT security filter before the UsernamePasswordAuthenticationFilter
+        // so that the JWT token can be added to the "SecurityContextHolder"
+        // ALWAYS ADD OUR CUSTOM FILTER TO THE FILTER CHAIN
+        .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    @Bean             // before this once run: Create user schema present in user.sql
-    public UserDetailsService userDetailsService() {
-        JdbcUserDetailsManager jdbcUserMgr = new JdbcUserDetailsManager(dataSource);
-
-        if(!userExists(jdbcUserMgr,"shreyas")) {
-            UserDetails user1= User.withUsername("shreyas").password(passwordEncoder().encode("123")).roles("USER").build();
-            jdbcUserMgr.createUser(user1);
-        }
-        if(!userExists(jdbcUserMgr,"admin")) {
-            UserDetails user2 = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build();
-            jdbcUserMgr.createUser(user2);
-        }
-
-        return jdbcUserMgr;
-//        return new InMemoryUserDetailsManager(user1, user2);
-    }
-
-    private boolean userExists(JdbcUserDetailsManager jdbcUserDetailsManager, String username) {
-        try {
-            jdbcUserDetailsManager.loadUserByUsername(username);
-            return true;
-        } catch (UsernameNotFoundException e) {
-            return false;
-        }
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
