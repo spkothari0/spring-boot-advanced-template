@@ -40,6 +40,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/v1/auth/**").permitAll() // Allow all requests to /api/v1/auth/**
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Allow access to Swagger UI
+                        .requestMatchers("/actuator/**").hasRole("ADMIN") // Allow only users with the ADMIN role to access Actuator endpoints
                         .anyRequest().authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))

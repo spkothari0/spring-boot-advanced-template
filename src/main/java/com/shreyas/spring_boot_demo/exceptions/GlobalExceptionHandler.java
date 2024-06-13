@@ -1,27 +1,28 @@
 package com.shreyas.spring_boot_demo.exceptions;
 
 import com.shreyas.spring_boot_demo.controller.APIResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestControllerAdvice
-public class GlobalExceptionHandler extends Exception {
+public class GlobalExceptionHandler {
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(Exception.class)
-    @ResponseBody
     public ResponseEntity<APIResponse<String>> handleException(Exception e) {
         logger.error("Exception occurred: {}", e.getMessage(), e);
         APIResponse<String> response = new APIResponse<>("ERROR", null, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -29,45 +30,58 @@ public class GlobalExceptionHandler extends Exception {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseBody
     public ResponseEntity<APIResponse<String>> handleAccessDeniedException(AccessDeniedException ex) {
         logger.error("AccessDeniedException occurred: {}", ex.getMessage(), ex);
-        APIResponse<String> response = new APIResponse<>("Forbidden", null, ex.getMessage(), HttpStatus.FORBIDDEN);
+        APIResponse<String> response = new APIResponse<>("Forbidden", null, ex.getMessage() + ". Please contact the admin for access", HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseBody
-    public ResponseEntity<APIResponse<String>> handleAutherizationException(AuthenticationException ex) {
-        logger.error("AuthenticationException occurred: {}", ex.getMessage(),ex);
+    public ResponseEntity<APIResponse<String>> handleAuthenticationException(AuthenticationException ex) {
+        logger.error("AuthenticationException occurred: {}", ex.getMessage(), ex);
         APIResponse<String> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseBody
     public ResponseEntity<APIResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));
+        logger.error("ResourceNotFoundException occurred: {}", ex.getMessage(), ex);
+        APIResponse<Void> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
     public ResponseEntity<APIResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
-        // Extract validation errors from the exception and create a custom error response
-        List<String> errorMessages = ex.getBindingResult()
+        logger.error("MethodArgumentNotValidException occurred: {}", ex.getMessage(), ex);
+        List<APIResponse.ErrorDetail> errorDetails = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(FieldError::getDefaultMessage)
+                .map(fieldError -> new APIResponse.ErrorDetail(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new APIResponse<>("ERROR", null, errorMessages.toString(), HttpStatus.BAD_REQUEST));
+        APIResponse<Void> response = new APIResponse<>("ERROR", null, "Validation failed", HttpStatus.BAD_REQUEST, errorDetails, null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<APIResponse<String>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        logger.error("HttpRequestMethodNotSupportedException occurred: {}", ex.getMessage(), ex);
+        APIResponse<String> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<APIResponse<Void>> handleConstraintViolationException(ConstraintViolationException ex) {
+        logger.error("ConstraintViolationException occurred: {}", ex.getMessage(), ex);
+        List<APIResponse.ErrorDetail> errorDetails = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> new APIResponse.ErrorDetail(violation.getPropertyPath().toString(), violation.getMessage()))
+                .collect(Collectors.toList());
+
+        APIResponse<Void> response = new APIResponse<>("ERROR", null, "Validation failed", HttpStatus.BAD_REQUEST, errorDetails, null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
-
 
 class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
