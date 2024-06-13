@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class StudentController extends BaseController {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "204", description = "No Content")
     })
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<List<StudentBean>>> getStudents() {
         List<StudentBean> students = studentService.getAllStudents();
         if (students == null || students.isEmpty())
@@ -40,6 +42,7 @@ public class StudentController extends BaseController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get student by id", description = "Get a student by its id")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<StudentBean>> getStudentById(@PathVariable Long id) {
         StudentBean student = studentService.getStudentById(id);
         if (student == null)
@@ -49,6 +52,7 @@ public class StudentController extends BaseController {
 
     @GetMapping("/email/{email}")
     @Operation(summary = "Get student by email", description = "Get a student by its email")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<StudentBean>> getStudentByEmail(@PathVariable String email) {
         StudentBean student = studentService.getStudentByEmail(email);
         if (student == null)
@@ -58,6 +62,7 @@ public class StudentController extends BaseController {
 
     @GetMapping("/name/{name}")
     @Operation(summary = "Get student by first name", description = "Get a student by its first name")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<List<StudentBean>>> getStudentByFirstName(@PathVariable String name) {
         List<StudentBean> students = studentService.getStudentByName(name);
         if (students == null)
@@ -66,7 +71,8 @@ public class StudentController extends BaseController {
     }
 
     @PostMapping("/")
-    @Operation(summary = "Create a student", description = "Create a student unless the email already exists")
+    @Operation(summary = "Create a student", description = "Create a student(if u got admin access) unless the email already exists")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<APIResponse<StudentBean>> createStudent(@Valid @RequestBody StudentBean StudentBean) {
         StudentBean createdStudent = studentService.createStudent(StudentBean);
         if (createdStudent == null)
@@ -76,6 +82,7 @@ public class StudentController extends BaseController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a student", description = "Update a student if the id is found")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<APIResponse<StudentBean>> updateStudent(@PathVariable Long id, @RequestBody @Valid StudentBean studentBean) {
         Boolean isValidId = studentService.getStudentById(id) != null;
 
@@ -90,6 +97,7 @@ public class StudentController extends BaseController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a student", description = "Delete a student if the id is found")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<APIResponse<Void>> deleteStudent(@PathVariable Long id) {
         Boolean isDeleted = studentService.deleteStudent(id);
         if (isDeleted) {

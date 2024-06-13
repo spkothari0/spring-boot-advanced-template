@@ -28,7 +28,7 @@ public class CourseController extends BaseController {
 
     @GetMapping("/")
     @Operation(summary = "Get all courses", description = "Get all courses")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<List<CourseBean>>> getCourses() {
         List<CourseBean> courses = courseService.getAllCourses();
         if (courses == null || courses.isEmpty())
@@ -38,7 +38,7 @@ public class CourseController extends BaseController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get course by id", description = "Get course by id")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<CourseBean>> getCourseById(@NotNull @PathVariable Long id) {
         CourseBean course = courseService.getCourseById(id);
         if (course == null)
@@ -78,7 +78,7 @@ public class CourseController extends BaseController {
 
     @GetMapping("/name/{name}")
     @Operation(summary = "Get course by course name", description = "Get course by course name")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<APIResponse<CourseBean>> getCourseByCourseName(@NotNull @PathVariable String name) {
         CourseBean course = courseService.getCourseByCourseName(name);
         if (course == null)
