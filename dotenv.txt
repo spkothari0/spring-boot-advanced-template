@@ -1,0 +1,10 @@
+## How to setup environment variables in IntellIj: goto run>Edit Configurations>Modify Options. Browse your env file there.
+
+### DataSource configuration ###
+SPRING_DATASOURCE_URL=
+SPRING_DATASOURCE_USERNAME=
+SPRING_DATASOURCE_PASSWORD=
+
+# Spring Security configuration
+SPRING_APP_JWTSECRET=
+SPRING_APP_JWTEXPIRATIONMS=
