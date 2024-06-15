@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -27,7 +26,7 @@ public class LoginResponse {
     @Override
     public String toString() {
         return "LoginResponse{" +
-                "jwtToken='" + jwtToken + '\'' +
+                "jwtToken=hidden'" +  + '\'' +
                 ", username='" + username + '\'' +
                 ", roles=" + roles.toString() +
                 '}';

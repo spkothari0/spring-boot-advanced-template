@@ -1,5 +1,6 @@
 package com.shreyas.spring_boot_demo.config;
 
+import com.shreyas.spring_boot_demo.filter.CorrelationIdFilter;
 import com.shreyas.spring_boot_demo.jwt.AuthEntryPointJwt;
 import com.shreyas.spring_boot_demo.jwt.AuthTokenFilter;
 import com.shreyas.spring_boot_demo.jwt.JwtUtils;
@@ -31,29 +32,31 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils,UserDetailsService userService) {
+    public AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils, UserDetailsService userService) {
         return new AuthTokenFilter(jwtUtils, userService);
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter, CorrelationIdFilter correlationIdFilter) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/v1/auth/**").permitAll() // Allow all requests to /api/v1/auth/**
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Allow access to Swagger UI
                         .requestMatchers("/actuator/**").hasRole("ADMIN") // Allow only users with the ADMIN role to access Actuator endpoints
                         .anyRequest().authenticated())
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .headers(headers -> headers
-                .frameOptions(options ->
-                        options.sameOrigin()
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .headers(headers -> headers
+                        .frameOptions(options ->
+                                options.sameOrigin()
+                        )
                 )
-        )
-        .csrf(csrf -> csrf.disable())
-        // add our custom JWT security filter before the UsernamePasswordAuthenticationFilter
-        // so that the JWT token can be added to the "SecurityContextHolder"
-        // ALWAYS ADD OUR CUSTOM FILTER TO THE FILTER CHAIN
-        .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable())
+                // add our custom JWT security filter before the UsernamePasswordAuthenticationFilter
+                // so that the JWT token can be added to the "SecurityContextHolder"
+                // ALWAYS ADD OUR CUSTOM FILTER TO THE FILTER CHAIN
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(correlationIdFilter, AuthTokenFilter.class);
+
         return http.build();
     }
 

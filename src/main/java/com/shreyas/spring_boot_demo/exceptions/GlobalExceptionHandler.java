@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -43,8 +44,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<APIResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<APIResponse<Void>> handleResourceNotFoundException(RuntimeException ex) {
         logger.error("ResourceNotFoundException occurred: {}", ex.getMessage(), ex);
         APIResponse<Void> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -81,10 +82,11 @@ public class GlobalExceptionHandler {
         APIResponse<Void> response = new APIResponse<>("ERROR", null, "Validation failed", HttpStatus.BAD_REQUEST, errorDetails, null);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-}
 
-class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
-        super(message);
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public  ResponseEntity<APIResponse<Void>> handleMissingRequestHeader(MissingRequestHeaderException ex ){
+        logger.error("Missing Header Exception", ex.getMessage(),ex);
+        APIResponse<Void> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

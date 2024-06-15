@@ -1,19 +1,19 @@
 package com.shreyas.spring_boot_demo.config;
 
+import com.shreyas.spring_boot_demo.filter.CorrelationIdCustomizer;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import org.springdoc.core.customizers.OperationCustomizer;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.beans.factory.annotation.Autowired;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(
@@ -34,12 +34,14 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 public class SwaggerConfig {
 
     private final ApplicationContext applicationContext;
-    private final OperationCustomizer operationCustomizer;
+    private final ControllerNameCustomizer controllerNameCustomizer;
+    private final CorrelationIdCustomizer correlationIdCustomizer;
 
     @Autowired
-    public SwaggerConfig(ApplicationContext applicationContext,CustomOperationCustomizer operationCustomizer) {
+    public SwaggerConfig(ApplicationContext applicationContext, ControllerNameCustomizer operationCustomizer, CorrelationIdCustomizer correlationIdCustomizer) {
         this.applicationContext = applicationContext;
-        this.operationCustomizer = operationCustomizer;
+        this.controllerNameCustomizer = operationCustomizer;
+        this.correlationIdCustomizer = correlationIdCustomizer;
     }
 
     @Bean
@@ -47,7 +49,8 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("custom-api")
                 .packagesToScan("com.shreyas.spring_boot_demo.controller") // Specify your controllers' package
-                .addOperationCustomizer(operationCustomizer)
+                .addOperationCustomizer(controllerNameCustomizer)
+                .addOperationCustomizer(correlationIdCustomizer)
                 .build();
     }
 
