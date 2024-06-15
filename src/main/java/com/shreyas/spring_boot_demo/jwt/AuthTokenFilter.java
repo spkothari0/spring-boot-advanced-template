@@ -33,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         logger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
         try{
-            String jws = parseJws(request);
+            String jws = jwtUtils.getJwtFromHeader(request);
             if(jws!= null && jwtUtils.validateToken(jws)) {
                 String username = jwtUtils.getUsernameFromToken(jws);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -52,11 +52,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         // before this point an custom filter was added. Now we are telling to continue to next filter
         filterChain.doFilter(request, response);
-    }
-
-    private String parseJws(HttpServletRequest request) {
-        String jwt= jwtUtils.getJwtFromHeader(request);
-        logger.debug("AuthTokenFilter.java: {}", jwt);
-        return jwt;
     }
 }
