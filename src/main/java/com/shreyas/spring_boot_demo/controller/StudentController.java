@@ -1,5 +1,6 @@
 package com.shreyas.spring_boot_demo.controller;
 
+import com.shreyas.spring_boot_demo.Annotations.HttpCacheable;
 import com.shreyas.spring_boot_demo.business.bean.StudentBean;
 import com.shreyas.spring_boot_demo.service.IStudentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,7 @@ public class StudentController extends BaseController {
             @ApiResponse(responseCode = "204", description = "No Content")
     })
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<List<StudentBean>>> getStudents() {
         List<StudentBean> students = studentService.getAllStudents();
         if (students == null || students.isEmpty())
@@ -43,6 +45,7 @@ public class StudentController extends BaseController {
     @GetMapping("/{id}")
     @Operation(summary = "Get student by id", description = "Get a student by its id")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<StudentBean>> getStudentById(@PathVariable Long id) {
         StudentBean student = studentService.getStudentById(id);
         if (student == null)
@@ -53,6 +56,7 @@ public class StudentController extends BaseController {
     @GetMapping("/email/{email}")
     @Operation(summary = "Get student by email", description = "Get a student by its email")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<StudentBean>> getStudentByEmail(@PathVariable String email) {
         StudentBean student = studentService.getStudentByEmail(email);
         if (student == null)
@@ -63,6 +67,7 @@ public class StudentController extends BaseController {
     @GetMapping("/name/{name}")
     @Operation(summary = "Get student by first name", description = "Get a student by its first name")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<List<StudentBean>>> getStudentByFirstName(@PathVariable String name) {
         List<StudentBean> students = studentService.getStudentByName(name);
         if (students == null)

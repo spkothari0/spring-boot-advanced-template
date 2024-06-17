@@ -15,6 +15,15 @@ public class APIResponse<T> {
     private String message;
     private List<ErrorDetail> errors;
     private PaginationMetadata pagination;
+    private Boolean isCached = false;
+
+    public APIResponse(String status, T data, String message, HttpStatusCode code, Boolean isCached) {
+        this.status = status;
+        this.data = data;
+        this.message = message;
+        this.statusCode = code.value();
+        this.isCached = isCached;
+    }
 
     public APIResponse(String status, T data, String message, HttpStatusCode code) {
         this.status = status;

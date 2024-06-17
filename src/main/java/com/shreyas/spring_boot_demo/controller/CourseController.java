@@ -1,5 +1,6 @@
 package com.shreyas.spring_boot_demo.controller;
 
+import com.shreyas.spring_boot_demo.Annotations.HttpCacheable;
 import com.shreyas.spring_boot_demo.business.bean.CourseBean;
 import com.shreyas.spring_boot_demo.service.ICourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,7 @@ public class CourseController extends BaseController {
     @GetMapping("/")
     @Operation(summary = "Get all courses", description = "Get all courses")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<List<CourseBean>>> getCourses() {
         List<CourseBean> courses = courseService.getAllCourses();
         if (courses == null || courses.isEmpty())
@@ -39,6 +41,7 @@ public class CourseController extends BaseController {
     @GetMapping("/{id}")
     @Operation(summary = "Get course by id", description = "Get course by id")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<CourseBean>> getCourseById(@NotNull @PathVariable Long id) {
         CourseBean course = courseService.getCourseById(id);
         if (course == null)
@@ -79,6 +82,7 @@ public class CourseController extends BaseController {
     @GetMapping("/name/{name}")
     @Operation(summary = "Get course by course name", description = "Get course by course name")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<CourseBean>> getCourseByCourseName(@NotNull @PathVariable String name) {
         CourseBean course = courseService.getCourseByCourseName(name);
         if (course == null)
@@ -115,6 +119,7 @@ public class CourseController extends BaseController {
     @GetMapping("/invalid")
     @Operation(summary = "Get all invalid courses", description = "Get all courses for which no seats are assigned")
     @PreAuthorize("hasRole('ADMIN')")
+    @HttpCacheable
     public ResponseEntity<APIResponse<List<CourseBean>>> getAllInvalidCourses() {
         List<CourseBean> courses = courseService.getInvalidCourses();
         if (courses == null || courses.isEmpty())

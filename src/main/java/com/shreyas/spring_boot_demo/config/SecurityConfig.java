@@ -1,9 +1,9 @@
 package com.shreyas.spring_boot_demo.config;
 
+import com.shreyas.spring_boot_demo.filter.cache.CacheFilter;
 import com.shreyas.spring_boot_demo.filter.correlation.CorrelationIdFilter;
 import com.shreyas.spring_boot_demo.jwt.AuthEntryPointJwt;
 import com.shreyas.spring_boot_demo.jwt.AuthTokenFilter;
-import com.shreyas.spring_boot_demo.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,13 +30,9 @@ public class SecurityConfig {
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils, UserDetailsService userService) {
-        return new AuthTokenFilter(jwtUtils, userService);
-    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter, CorrelationIdFilter correlationIdFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter, CorrelationIdFilter correlationIdFilter, CacheFilter cacheFilter) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/v1/auth/**").permitAll() // Allow all requests to /api/v1/auth/**
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Allow access to Swagger UI
@@ -55,8 +50,8 @@ public class SecurityConfig {
                 // so that the JWT token can be added to the "SecurityContextHolder"
                 // ALWAYS ADD OUR CUSTOM FILTER TO THE FILTER CHAIN
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(correlationIdFilter, AuthTokenFilter.class);
-//                .addFilterAfter(cacheFilter, AuthTokenFilter.class);
+                .addFilterBefore(correlationIdFilter, AuthTokenFilter.class)
+                .addFilterAfter(cacheFilter, AuthTokenFilter.class);
 
         return http.build();
     }

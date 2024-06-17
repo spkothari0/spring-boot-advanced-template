@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
+//@Order(1)
 public class CorrelationIdFilter implements Filter {
     public static final String CORRELATION_ID_HEADER_NAME = "Correlation-Id";
 
@@ -36,7 +37,6 @@ public class CorrelationIdFilter implements Filter {
             return;
         }
         String correlationId = httpServletRequest.getHeader(CORRELATION_ID_HEADER_NAME);
-        System.out.println("Correlation ID from CorelationIDFilter: " + correlationId);
         if (correlationId == null || !isValidUUID(correlationId)) {
             throw new IllegalArgumentException("Correlation header is missing");
         }
