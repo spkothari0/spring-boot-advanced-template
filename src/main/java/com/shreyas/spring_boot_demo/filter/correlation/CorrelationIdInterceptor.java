@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_demo.filter;
+package com.shreyas.spring_boot_demo.filter.correlation;
 
 import org.slf4j.MDC;
 import org.springframework.http.HttpRequest;

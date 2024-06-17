@@ -1,6 +1,6 @@
 package com.shreyas.spring_boot_demo.config;
 
-import com.shreyas.spring_boot_demo.filter.CorrelationIdCustomizer;
+import com.shreyas.spring_boot_demo.filter.correlation.CorrelationIdCustomizer;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;

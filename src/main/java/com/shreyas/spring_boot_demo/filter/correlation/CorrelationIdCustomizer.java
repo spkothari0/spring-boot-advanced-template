@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_demo.filter;
+package com.shreyas.spring_boot_demo.filter.correlation;
 
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.StringSchema;

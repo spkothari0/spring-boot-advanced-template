@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_demo.filter;
+package com.shreyas.spring_boot_demo.filter.correlation;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

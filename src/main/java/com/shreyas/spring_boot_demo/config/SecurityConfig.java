@@ -1,6 +1,6 @@
 package com.shreyas.spring_boot_demo.config;
 
-import com.shreyas.spring_boot_demo.filter.CorrelationIdFilter;
+import com.shreyas.spring_boot_demo.filter.correlation.CorrelationIdFilter;
 import com.shreyas.spring_boot_demo.jwt.AuthEntryPointJwt;
 import com.shreyas.spring_boot_demo.jwt.AuthTokenFilter;
 import com.shreyas.spring_boot_demo.jwt.JwtUtils;
@@ -56,6 +56,7 @@ public class SecurityConfig {
                 // ALWAYS ADD OUR CUSTOM FILTER TO THE FILTER CHAIN
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(correlationIdFilter, AuthTokenFilter.class);
+//                .addFilterAfter(cacheFilter, AuthTokenFilter.class);
 
         return http.build();
     }

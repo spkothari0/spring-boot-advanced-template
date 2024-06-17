@@ -1,5 +1,6 @@
 package com.shreyas.spring_boot_demo.filter;
 
+import com.shreyas.spring_boot_demo.filter.correlation.CorrelationIdInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
