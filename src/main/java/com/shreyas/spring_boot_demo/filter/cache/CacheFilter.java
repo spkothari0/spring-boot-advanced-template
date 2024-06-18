@@ -10,6 +10,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
@@ -38,6 +39,9 @@ public class CacheFilter implements Filter {
     private final ApplicationContext applicationContext;
     private final StringRedisTemplate redisTemplate;
 
+    @Value("${CACHE_ENABLED}")
+    private boolean cacheEnabled;
+
     @Autowired
     public CacheFilter(StringRedisTemplate redisTemplate, ApplicationContext applicationContext) {
         this.redisTemplate = redisTemplate;
@@ -58,7 +62,7 @@ public class CacheFilter implements Filter {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        if (isExcluded || !isCacheable) {
+        if (isExcluded || !isCacheable || !cacheEnabled) {
             chain.doFilter(request, response);
             return;
         }
