@@ -30,7 +30,7 @@ public class BaseController {
         return new ResponseEntity<>(response, getJsonHeaders(), HttpStatus.OK);
     }
 
-    protected ResponseEntity<APIResponse<Void>> SuccessResponse(String message) {
+    protected ResponseEntity<APIResponse<Void>> SuccessResponseMessage(String message) {
         logger.info("Returning success response with no body and a message");
         APIResponse<Void> response = new APIResponse<>("SUCCESS", null, message, HttpStatus.OK);
         return new ResponseEntity<>(response, getJsonHeaders(), HttpStatus.OK);

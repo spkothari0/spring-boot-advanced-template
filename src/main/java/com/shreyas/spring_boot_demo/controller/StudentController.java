@@ -89,7 +89,7 @@ public class StudentController extends BaseController {
     @Operation(summary = "Update a student", description = "Update a student if the id is found")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<APIResponse<StudentBean>> updateStudent(@PathVariable Long id, @RequestBody @Valid StudentBean studentBean) {
-        Boolean isValidId = studentService.getStudentById(id) != null;
+        boolean isValidId = studentService.getStudentById(id) != null;
 
         if (isValidId) {
             studentBean.setId(id);
@@ -106,7 +106,7 @@ public class StudentController extends BaseController {
     public ResponseEntity<APIResponse<Void>> deleteStudent(@PathVariable Long id) {
         Boolean isDeleted = studentService.deleteStudent(id);
         if (isDeleted) {
-            return SuccessResponse("Student deleted successfully");
+            return SuccessResponseMessage("Student deleted successfully");
         } else {
             return NotFoundResponse("Student not found");
         }

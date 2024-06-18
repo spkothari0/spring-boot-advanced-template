@@ -68,6 +68,5 @@ public class APIResponse<T> {
             this.totalElements = totalElements;
             this.totalPages = totalPages;
         }
-
     }
 }

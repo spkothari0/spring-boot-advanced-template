@@ -76,7 +76,7 @@ public class CourseController extends BaseController {
         Boolean deleted = courseService.deleteCourse(id);
         if (!deleted)
             return NotFoundResponse("Course not found");
-        return SuccessResponse("Successfully deleted course");
+        return SuccessResponseMessage("Successfully deleted course");
     }
 
     @GetMapping("/name/{name}")
@@ -100,7 +100,7 @@ public class CourseController extends BaseController {
 
         if (!courseService.assignCourseSeat(courseId))
             return ErrorResponse("Failed to assign the course");
-        return SuccessResponse("Successfully assigned course");
+        return SuccessResponseMessage("Successfully assigned course");
     }
 
     @GetMapping("/unassign/{courseId}")
@@ -113,7 +113,7 @@ public class CourseController extends BaseController {
 
         if (!courseService.unassignCourseSeat(courseId))
             return ErrorResponse("Failed to unassign the course");
-        return SuccessResponse("Successfully unassigned course");
+        return SuccessResponseMessage("Successfully unassigned course");
     }
 
     @GetMapping("/invalid")

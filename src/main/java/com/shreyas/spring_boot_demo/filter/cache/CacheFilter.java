@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.shreyas.spring_boot_demo.Annotations.HttpCacheable;
+import com.shreyas.spring_boot_demo.Utility.GenericUtils;
 import com.shreyas.spring_boot_demo.controller.APIResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,7 +70,7 @@ public class CacheFilter implements Filter {
         httpServletResponse.setDateHeader("Expires", 0);
 
         // check if response for the path key exists
-        String cachedResponse = redisTemplate.opsForValue().get(requestURI);
+        String cachedResponse = redisTemplate.opsForValue().get(GenericUtils.encodeKeyFromPath(requestURI));
         if (cachedResponse != null) {
             // Deserialize the cached response into APIResponse
             Gson gson = new Gson();
@@ -100,7 +101,7 @@ public class CacheFilter implements Filter {
             if(!jsonResponse.trim().isEmpty()){
                 JsonNode jsonObject = objectMapper.readTree(jsonResponse);
                 String serializedJson = objectMapper.writeValueAsString(jsonObject);
-                redisTemplate.opsForValue().set(requestURI, serializedJson);
+                redisTemplate.opsForValue().set(GenericUtils.encodeKeyFromPath(requestURI), serializedJson);
             }
             // Write the cached response back to the original response
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();
