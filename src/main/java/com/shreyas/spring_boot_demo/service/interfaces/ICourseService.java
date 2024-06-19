@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_demo.service;
+package com.shreyas.spring_boot_demo.service.interfaces;
 
 import com.shreyas.spring_boot_demo.business.bean.CourseBean;
 

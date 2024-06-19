@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_demo.repository;
+package com.shreyas.spring_boot_demo.repository.interfaces;
 
 import com.shreyas.spring_boot_demo.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
