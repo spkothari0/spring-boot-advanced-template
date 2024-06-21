@@ -3,8 +3,9 @@ package com.shreyas.spring_boot_demo.service;
 import com.shreyas.spring_boot_demo.Utility.GenericBeanMapper;
 import com.shreyas.spring_boot_demo.business.bean.CourseBean;
 import com.shreyas.spring_boot_demo.entity.CourseEntity;
-import com.shreyas.spring_boot_demo.repository.ICourseRepo;
-import com.shreyas.spring_boot_demo.repository.ICourseRepoCustom;
+import com.shreyas.spring_boot_demo.repository.interfaces.ICourseRepo;
+import com.shreyas.spring_boot_demo.repository.interfaces.ICourseRepoCustom;
+import com.shreyas.spring_boot_demo.service.interfaces.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -24,6 +24,12 @@ public class BaseController {
         return new ResponseEntity<>(response, getJsonHeaders(), HttpStatus.OK);
     }
 
+    protected <T> ResponseEntity<APIResponse<T>> SuccessResponse(String message,T body) {
+        logger.info("Returning success response with body: {} and message: {}", body, message);
+        APIResponse<T> response = new APIResponse<>("SUCCESS", body, message, HttpStatus.OK);
+        return new ResponseEntity<>(response, getJsonHeaders(), HttpStatus.OK);
+    }
+
     protected ResponseEntity<APIResponse<Void>> SuccessResponse() {
         logger.info("Returning success response with no body");
         APIResponse<Void> response = new APIResponse<>("SUCCESS", null, "Operation successful", HttpStatus.OK);

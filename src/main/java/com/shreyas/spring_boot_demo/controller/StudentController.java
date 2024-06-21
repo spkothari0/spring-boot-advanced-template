@@ -2,7 +2,7 @@ package com.shreyas.spring_boot_demo.controller;
 
 import com.shreyas.spring_boot_demo.Annotations.HttpCacheable;
 import com.shreyas.spring_boot_demo.business.bean.StudentBean;
-import com.shreyas.spring_boot_demo.service.IStudentService;
+import com.shreyas.spring_boot_demo.service.interfaces.IStudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

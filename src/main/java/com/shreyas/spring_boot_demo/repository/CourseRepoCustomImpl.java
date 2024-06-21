@@ -1,6 +1,7 @@
 package com.shreyas.spring_boot_demo.repository;
 
 import com.shreyas.spring_boot_demo.entity.CourseEntity;
+import com.shreyas.spring_boot_demo.repository.interfaces.ICourseRepoCustom;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;

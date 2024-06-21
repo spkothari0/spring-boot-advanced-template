@@ -2,7 +2,7 @@ package com.shreyas.spring_boot_demo.controller;
 
 import com.shreyas.spring_boot_demo.Annotations.HttpCacheable;
 import com.shreyas.spring_boot_demo.business.bean.CourseBean;
-import com.shreyas.spring_boot_demo.service.ICourseService;
+import com.shreyas.spring_boot_demo.service.interfaces.ICourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

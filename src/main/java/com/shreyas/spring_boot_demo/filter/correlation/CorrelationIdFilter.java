@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Component
 //@Order(1)
@@ -21,8 +22,14 @@ public class CorrelationIdFilter implements Filter {
             "/api-docs",
             "/swagger-resources",
             "/swagger-ui.html",
-            "/webjars/");
+            "/webjars/",
+            "/api/v1/auth/verification/.*");
 
+    private static List<Pattern> compilePatterns(List<String> paths) {
+        return paths.stream()
+                .map(Pattern::compile)
+                .toList();
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -30,7 +37,9 @@ public class CorrelationIdFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         String path = httpServletRequest.getRequestURI();
-        boolean isExcluded = EXCLUDED_PATHS.stream().anyMatch(path::startsWith);
+        List<Pattern> EXCLUDED_PATTERNS = compilePatterns(EXCLUDED_PATHS);
+
+        boolean isExcluded = EXCLUDED_PATTERNS.stream().anyMatch(pattern -> pattern.matcher(path).matches());
 
         if (isExcluded) {
             filterChain.doFilter(request, response);
