@@ -18,11 +18,11 @@ public class CorrelationIdFilter implements Filter {
     public static final String CORRELATION_ID_HEADER_NAME = "Correlation-Id";
 
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
-            "/swagger-ui/",
-            "/api-docs",
-            "/swagger-resources",
-            "/swagger-ui.html",
-            "/webjars/",
+            "/swagger-ui/.*",
+            "/api-docs.*",
+            "/swagger-resources.*",
+            "/swagger-ui.html.*",
+            "/webjars/.*",
             "/api/v1/auth/verification/.*");
 
     private static List<Pattern> compilePatterns(List<String> paths) {

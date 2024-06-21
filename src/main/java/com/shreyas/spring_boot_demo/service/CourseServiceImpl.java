@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CourseService implements ICourseService {
+public class CourseServiceImpl implements ICourseService {
     private final ICourseRepo repo;
     private final ICourseRepoCustom customRepo;
 
     @Autowired
-    public CourseService(ICourseRepo repo, ICourseRepoCustom customRepo) {
+    public CourseServiceImpl(ICourseRepo repo, ICourseRepoCustom customRepo) {
         this.repo = repo;
         this.customRepo = customRepo;
     }

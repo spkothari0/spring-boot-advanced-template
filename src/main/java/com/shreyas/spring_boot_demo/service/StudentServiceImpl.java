@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StudentService implements IStudentService {
+public class StudentServiceImpl implements IStudentService {
     private final IStudentRepo repository;
 
     @Autowired
-    public StudentService(IStudentRepo repository) {
+    public StudentServiceImpl(IStudentRepo repository) {
         this.repository = repository;
     }
 

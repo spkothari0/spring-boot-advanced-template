@@ -6,6 +6,7 @@ import com.shreyas.spring_boot_demo.business.bean.UserBean;
 import com.shreyas.spring_boot_demo.entity.Constants.RoleType;
 import com.shreyas.spring_boot_demo.jwt.JwtUtils;
 import com.shreyas.spring_boot_demo.service.interfaces.IUserServices;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,9 @@ public class LoginController extends BaseController {
     }
 
     @PostMapping(value = "/login")
+    @Operation(summary = "Login a user with the specified username and password. Accessible to all users.",
+        description = "Used to get the token for the specified user."
+    )
     public ResponseEntity<APIResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -54,6 +58,9 @@ public class LoginController extends BaseController {
 
     @PostMapping(value = "/register")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Register a user with the specified username and password and other information. Accessible to Admin only.",
+        description = "The Role of a user can be one of the following: ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, ROLE_USER."
+    )
     public ResponseEntity<APIResponse<UserBean>> register(@Valid @RequestBody UserBean user) {
         List<RoleType> roleList = new ArrayList<>(Arrays.asList(RoleType.values()));
         String role;
@@ -69,6 +76,8 @@ public class LoginController extends BaseController {
     }
 
     @GetMapping(value ="/verification/{token}", produces = MediaType.ALL_VALUE)
+    @Operation(summary = "Verify that user is registered and unlocked.",
+    description = "Should be accessed only via link from the email address.")
     public ResponseEntity<String> verifyUser(@PathVariable String token) {
         String response = userServices.verifyUser(token);
         return new ResponseEntity<>(response, HttpStatus.OK);
