@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.shreyas</groupId>
-	<artifactId>spring-boot-demo</artifactId>
+	<artifactId>spring-boot-advanced-template</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Spring Boot Demo</name>
-	<description>Basic Spring Boot project</description>
+	<name>Spring Boot Advanced Template</name>
+	<description>Spring Boot project with all the advanced commonly used Industry level configurations like token based Authentication and Authorization, CorrelationUId, Redis Caching, Swagger, AWS S3, etc. </description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -127,7 +127,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.shreyas.spring_boot_demo.SpringBootDemoApplication</mainClass>
+					<mainClass>com.shreyas.spring_boot_advanced_template.SpringBootAdvancedTemplate</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
