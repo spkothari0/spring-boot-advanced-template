@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private String username;
 
     @NotNull
-    @ManyToOne
+    @OneToOne()
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
     private Role role;
 

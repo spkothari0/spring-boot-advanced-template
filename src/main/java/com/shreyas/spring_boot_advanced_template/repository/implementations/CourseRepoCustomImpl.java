@@ -44,7 +44,7 @@ public class CourseRepoCustomImpl implements ICourseRepoCustom {
     /**
      * @return List<Course>
      */
-
+    @Override
     public List<CourseEntity> getInvalidCourses() {
         String jpql = "select c from Course c where c.occupiedSeats = 0";
         TypedQuery<CourseEntity> query = em.createQuery(jpql, CourseEntity.class);
