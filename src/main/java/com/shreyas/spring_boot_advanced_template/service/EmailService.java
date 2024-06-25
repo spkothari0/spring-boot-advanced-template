@@ -1,11 +1,11 @@
 package com.shreyas.spring_boot_advanced_template.service;
 
+import com.shreyas.spring_boot_advanced_template.AppConstant;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -19,25 +19,18 @@ public class EmailService implements IEmailService {
 
     private final JavaMailSender mailSender;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final AppConstant appConstant;
 
-    @Value("${MAIL_SERVICE_ENABLED}")
-    private boolean isMailServiceEnabled;
-
-    public EmailService(JavaMailSender mailSender) {
+    public EmailService(JavaMailSender mailSender, AppConstant appConstant) {
         this.mailSender = mailSender;
+        this.appConstant = appConstant;
     }
 
-    /**
-     * @param emailId
-     * @param Subject
-     * @param Message
-     * @return
-     */
     @Override
     @Async
     public CompletableFuture<Boolean> sendEmail(String emailId, String Subject, String Message) {
         try{
-            if(!isMailServiceEnabled){
+            if(!appConstant.IsMailServiceEnabled()){
                 logger.info("Mail service is disabled by developers.");
                 return CompletableFuture.completedFuture(false);
             }

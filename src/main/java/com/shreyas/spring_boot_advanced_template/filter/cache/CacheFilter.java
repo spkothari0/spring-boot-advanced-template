@@ -9,7 +9,6 @@ import com.shreyas.spring_boot_advanced_template.controller.APIResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -42,7 +41,6 @@ public class CacheFilter implements Filter {
     @Value("${CACHE_ENABLED}")
     private boolean cacheEnabled;
 
-    @Autowired
     public CacheFilter(StringRedisTemplate redisTemplate, ApplicationContext applicationContext) {
         this.redisTemplate = redisTemplate;
         this.applicationContext = applicationContext;

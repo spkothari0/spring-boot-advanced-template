@@ -4,7 +4,6 @@ import com.shreyas.spring_boot_advanced_template.filter.cache.CacheFilter;
 import com.shreyas.spring_boot_advanced_template.filter.correlation.CorrelationIdFilter;
 import com.shreyas.spring_boot_advanced_template.jwt.AuthEntryPointJwt;
 import com.shreyas.spring_boot_advanced_template.jwt.AuthTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
     private final AuthEntryPointJwt unauthorizedHandler;
-    @Autowired
+
     public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
         this.unauthorizedHandler = unauthorizedHandler;
     }

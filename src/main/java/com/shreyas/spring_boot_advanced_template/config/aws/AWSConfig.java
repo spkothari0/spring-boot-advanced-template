@@ -11,13 +11,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AWSConfig {
+    private final AppConstant appConstant;
+    public AWSConfig(AppConstant appConstant) {
+        this.appConstant = appConstant;
+    }
 
     @Bean
     public AmazonS3 s3(){
-        AWSCredentials awsCredentials = new BasicAWSCredentials(AppConstant.GetAWSAccessKey(), AppConstant.GetAWSSecretAccessKey());
+        AWSCredentials awsCredentials = new BasicAWSCredentials(appConstant.GetAWSAccessKey(), appConstant.GetAWSSecretAccessKey());
 
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withRegion(AppConstant.GetAWSS3Region()).build();
+                .withRegion(appConstant.GetAWSS3Region()).build();
     }
 }

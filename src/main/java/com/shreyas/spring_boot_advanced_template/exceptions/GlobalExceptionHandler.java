@@ -85,7 +85,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public  ResponseEntity<APIResponse<Void>> handleMissingRequestHeader(MissingRequestHeaderException ex ){
-        logger.error("Missing Header Exception", ex.getMessage(),ex);
+        logger.error("Missing Header Exception {}", ex.getMessage(),ex);
+        APIResponse<Void> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public  ResponseEntity<APIResponse<Void>> handleMissingRequestHeader(IllegalArgumentException ex ){
+        logger.error("Exception: {}",ex.getMessage(),ex);
         APIResponse<Void> response = new APIResponse<>("ERROR", null, ex.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

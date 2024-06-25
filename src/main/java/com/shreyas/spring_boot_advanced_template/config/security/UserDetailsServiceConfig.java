@@ -1,7 +1,6 @@
 package com.shreyas.spring_boot_advanced_template.config.security;
 
-import com.shreyas.spring_boot_advanced_template.service.UserServicesImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.shreyas.spring_boot_advanced_template.service.implementations.UserServicesImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,7 +12,6 @@ public class UserDetailsServiceConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserServicesImpl userService;
 
-    @Autowired
     public UserDetailsServiceConfig(PasswordEncoder passwordEncoder, UserServicesImpl user) {
 //        this.dataSource = dataSource;
         this.passwordEncoder = passwordEncoder;

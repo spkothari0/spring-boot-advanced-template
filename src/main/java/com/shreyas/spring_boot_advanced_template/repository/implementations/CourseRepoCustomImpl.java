@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_advanced_template.repository;
+package com.shreyas.spring_boot_advanced_template.repository.implementations;
 
 import com.shreyas.spring_boot_advanced_template.entity.CourseEntity;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.ICourseRepoCustom;

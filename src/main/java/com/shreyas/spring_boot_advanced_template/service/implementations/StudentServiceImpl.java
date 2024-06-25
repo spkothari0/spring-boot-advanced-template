@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_advanced_template.service;
+package com.shreyas.spring_boot_advanced_template.service.implementations;
 
 import com.shreyas.spring_boot_advanced_template.Utility.GenericBeanMapper;
 import com.shreyas.spring_boot_advanced_template.business.bean.StudentBean;
@@ -6,7 +6,6 @@ import com.shreyas.spring_boot_advanced_template.entity.StudentEntity;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IStudentRepo;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IStudentService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Optional;
 public class StudentServiceImpl implements IStudentService {
     private final IStudentRepo repository;
 
-    @Autowired
     public StudentServiceImpl(IStudentRepo repository) {
         this.repository = repository;
     }
@@ -30,10 +28,7 @@ public class StudentServiceImpl implements IStudentService {
 
     public StudentBean getStudentById(Long id) {
         Optional<StudentEntity> studentEntity = repository.findById(id);
-        if (studentEntity.isPresent()) {
-            return GenericBeanMapper.map(studentEntity.get(), StudentBean.class);
-        } else
-            return null;
+        return studentEntity.map(entity -> GenericBeanMapper.map(entity, StudentBean.class)).orElse(null);
     }
 
     public List<StudentBean> getStudentByName(String name) {

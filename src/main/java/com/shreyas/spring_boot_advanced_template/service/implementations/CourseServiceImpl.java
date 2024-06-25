@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_advanced_template.service;
+package com.shreyas.spring_boot_advanced_template.service.implementations;
 
 import com.shreyas.spring_boot_advanced_template.Utility.GenericBeanMapper;
 import com.shreyas.spring_boot_advanced_template.business.bean.CourseBean;
@@ -6,7 +6,6 @@ import com.shreyas.spring_boot_advanced_template.entity.CourseEntity;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.ICourseRepo;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.ICourseRepoCustom;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.ICourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class CourseServiceImpl implements ICourseService {
     private final ICourseRepo repo;
     private final ICourseRepoCustom customRepo;
 
-    @Autowired
     public CourseServiceImpl(ICourseRepo repo, ICourseRepoCustom customRepo) {
         this.repo = repo;
         this.customRepo = customRepo;
@@ -32,11 +30,7 @@ public class CourseServiceImpl implements ICourseService {
 
     public CourseBean getCourseById(Long id) {
         Optional<CourseEntity> courseEntity = repo.findById(id);
-        if (courseEntity.isPresent()) {
-            return GenericBeanMapper.map(courseEntity.get(), CourseBean.class);
-        } else {
-            return null;
-        }
+        return courseEntity.map(entity -> GenericBeanMapper.map(entity, CourseBean.class)).orElse(null);
     }
 
     public CourseBean addCourse(CourseBean courseBean) {

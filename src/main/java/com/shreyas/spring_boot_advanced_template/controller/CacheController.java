@@ -1,7 +1,6 @@
 package com.shreyas.spring_boot_advanced_template.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.util.Set;
 public class CacheController extends BaseController {
     private final StringRedisTemplate redisTemplate;
 
-    @Autowired
     public CacheController(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }

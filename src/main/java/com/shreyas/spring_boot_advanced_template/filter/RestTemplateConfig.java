@@ -1,7 +1,6 @@
 package com.shreyas.spring_boot_advanced_template.filter;
 
 import com.shreyas.spring_boot_advanced_template.filter.correlation.CorrelationIdInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -14,7 +13,6 @@ import java.util.List;
 public class RestTemplateConfig {
     private final CorrelationIdInterceptor correlationIdInterceptor;
 
-    @Autowired
     public RestTemplateConfig(CorrelationIdInterceptor correlationIdInterceptor) {
         this.correlationIdInterceptor = correlationIdInterceptor;
     }

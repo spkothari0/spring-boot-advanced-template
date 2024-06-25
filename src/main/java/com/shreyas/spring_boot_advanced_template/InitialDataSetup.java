@@ -5,7 +5,6 @@ import com.shreyas.spring_boot_advanced_template.entity.Role;
 import com.shreyas.spring_boot_advanced_template.entity.User;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IRoleRepo;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IUserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,17 +18,18 @@ public class InitialDataSetup implements CommandLineRunner {
     private final IRoleRepo roleRepo;
     private final IUserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final AppConstant appConstant;
 
-    @Autowired
-    public InitialDataSetup(IRoleRepo roleRepo, IUserRepo userRepository, PasswordEncoder passwordEncoder) {
+    public InitialDataSetup(IRoleRepo roleRepo, IUserRepo userRepository, PasswordEncoder passwordEncoder, AppConstant appCon) {
         this.roleRepo = roleRepo;
         this.userRepo = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.appConstant = appCon;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if(!AppConstant.RunStartupFile())
+        if(!appConstant.RunStartupFile())
             return;
         createRoleIfNotFound(RoleType.ROLE_ADMIN);
         createRoleIfNotFound(RoleType.ROLE_STUDENT);

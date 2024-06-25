@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_advanced_template.service;
+package com.shreyas.spring_boot_advanced_template.service.implementations;
 
 import com.shreyas.spring_boot_advanced_template.AppConstant;
 import com.shreyas.spring_boot_advanced_template.Utility.GenericBeanMapper;
@@ -9,6 +9,8 @@ import com.shreyas.spring_boot_advanced_template.entity.User;
 import com.shreyas.spring_boot_advanced_template.jwt.JwtUtils;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IRoleRepo;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IUserRepo;
+import com.shreyas.spring_boot_advanced_template.service.Constants;
+import com.shreyas.spring_boot_advanced_template.service.S3StorageService;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IEmailService;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IUserServices;
 import lombok.extern.slf4j.Slf4j;
@@ -33,15 +35,17 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
     private final IEmailService emailService;
     private final JwtUtils jwtUtils;
     private final S3StorageService storageService;
+    private final AppConstant appConstant;
 
     @Autowired
-    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils, S3StorageService storageService) {
+    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils, S3StorageService storageService, AppConstant appConstant) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.jwtUtils = jwtUtils;
         this.storageService = storageService;
+        this.appConstant = appConstant;
     }
 
     @Override
@@ -109,7 +113,7 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
             throw new UsernameNotFoundException("User with username: " + username + " not found!");
         }
         User user = u.get();
-        if (!AppConstant.AWSServiceEnabled()) {
+        if (!appConstant.AWSServiceEnabled()) {
             log.warn("AWS services are disabled ! Please enable them to continue.");
             return false;
         }

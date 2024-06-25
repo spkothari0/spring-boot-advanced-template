@@ -3,10 +3,8 @@ package com.shreyas.spring_boot_advanced_template.controller;
 import com.shreyas.spring_boot_advanced_template.business.bean.LoginRequest;
 import com.shreyas.spring_boot_advanced_template.business.bean.LoginResponse;
 import com.shreyas.spring_boot_advanced_template.jwt.JwtUtils;
-import com.shreyas.spring_boot_advanced_template.service.interfaces.IUserServices;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,13 +24,10 @@ import java.util.List;
 public class LoginController extends BaseController {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-    private final IUserServices userServices;
 
-    @Autowired
-    public LoginController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, IUserServices userServices) {
+    public LoginController(JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
-        this.userServices = userServices;
     }
 
     @PostMapping(value = "/login")

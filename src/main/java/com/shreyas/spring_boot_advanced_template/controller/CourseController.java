@@ -6,7 +6,6 @@ import com.shreyas.spring_boot_advanced_template.service.interfaces.ICourseServi
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,6 @@ public class CourseController extends BaseController {
 
     private final ICourseService courseService;
 
-    @Autowired
     public CourseController(ICourseService courseService) {
         this.courseService = courseService;
     }

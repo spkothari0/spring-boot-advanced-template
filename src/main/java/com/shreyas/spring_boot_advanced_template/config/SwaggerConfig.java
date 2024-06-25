@@ -10,7 +10,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +36,6 @@ public class SwaggerConfig {
     private final ControllerNameCustomizer controllerNameCustomizer;
     private final CorrelationIdCustomizer correlationIdCustomizer;
 
-    @Autowired
     public SwaggerConfig(ApplicationContext applicationContext, ControllerNameCustomizer operationCustomizer, CorrelationIdCustomizer correlationIdCustomizer) {
         this.applicationContext = applicationContext;
         this.controllerNameCustomizer = operationCustomizer;

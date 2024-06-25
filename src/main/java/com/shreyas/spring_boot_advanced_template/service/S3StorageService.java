@@ -8,7 +8,6 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import com.shreyas.spring_boot_advanced_template.AppConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,10 +24,9 @@ public class S3StorageService {
     private final String bucketName;
     private final AmazonS3 s3Client;
 
-    @Autowired
-    public S3StorageService(AmazonS3 s3Client) {
+    public S3StorageService(AmazonS3 s3Client, AppConstant appConstant) {
         this.s3Client = s3Client;
-        bucketName = AppConstant.AWSS3BucketName();
+        bucketName = appConstant.AWSS3BucketName();
     }
 
     public boolean saveFile(MultipartFile file) {
