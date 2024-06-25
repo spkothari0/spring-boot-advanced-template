@@ -33,17 +33,15 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
     private final IEmailService emailService;
     private final JwtUtils jwtUtils;
     private final S3StorageService storageService;
-    private final AppConstant appConstant;
 
     @Autowired
-    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils, S3StorageService storageService, AppConstant appConstant) {
+    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils, S3StorageService storageService) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.jwtUtils = jwtUtils;
         this.storageService = storageService;
-        this.appConstant = appConstant;
     }
 
     @Override
@@ -111,7 +109,7 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
             throw new UsernameNotFoundException("User with username: " + username + " not found!");
         }
         User user = u.get();
-        if(!appConstant.AWSServiceEnabled()){
+        if(!AppConstant.AWSServiceEnabled()){
             log.warn("AWS services are disabled ! Please enable them to continue.");
             return false;
         }

@@ -6,38 +6,38 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AppConstant {
-    private final Environment environment;
+    private static Environment environment;
 
     @Autowired
     public AppConstant(Environment environment) {
-        this.environment = environment;
+        AppConstant.environment = environment;
     }
 
-    public boolean RunStartupFile(){
+    public static boolean RunStartupFile() {
         return Boolean.parseBoolean(environment.getProperty("SPRING_APP_RUN_STARTUP_FILE"));
     }
 
-    public String GetApplicationURL() {
+    public static String GetApplicationURL() {
         return environment.getProperty("SPRING_APP_API_URL");
     }
 
-    public String GetAWSAccessKey() {
+    public static String GetAWSAccessKey() {
         return environment.getProperty("AWS_ACCESS_KEY_ID");
     }
 
-    public String GetAWSSecretAccessKey() {
+    public static String GetAWSSecretAccessKey() {
         return environment.getProperty("AWS_SECRET_ACCESS_KEY");
     }
 
-    public String GetAWSS3Region() {
+    public static String GetAWSS3Region() {
         return environment.getProperty("AWS_S3_REGION");
     }
 
-    public boolean AWSServiceEnabled() {
+    public static boolean AWSServiceEnabled() {
         return Boolean.parseBoolean(environment.getProperty("AWS_SERVICE_ENABLED"));
     }
 
-    public String AWSS3BucketName() {
+    public static String AWSS3BucketName() {
         return environment.getProperty("AWS_S3_BUCKET_NAME");
     }
 }

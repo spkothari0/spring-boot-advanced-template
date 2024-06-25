@@ -21,13 +21,11 @@ import java.util.Optional;
 public class S3StorageService {
     private final String bucketName;
     private final AmazonS3 s3Client;
-    private final AppConstant appConstant;
 
     @Autowired
-    public S3StorageService(AmazonS3 s3Client, AppConstant appConstant) {
+    public S3StorageService(AmazonS3 s3Client) {
         this.s3Client = s3Client;
-        this.appConstant = appConstant;
-        bucketName = appConstant.AWSS3BucketName();
+        bucketName = AppConstant.AWSS3BucketName();
     }
 
     public boolean saveFile(MultipartFile file) {
@@ -55,8 +53,7 @@ public class S3StorageService {
             map.forEach(metadata::addUserMetadata);
         });
         try{
-//            filename=path+"/"+filename;
-            s3Client.putObject(bucketName, filename, inputStream, metadata);
+            s3Client.putObject(bucketName, path+filename, inputStream, metadata);
         } catch (AmazonS3Exception e){
             log.error("Failed to upload file", e);
             throw new IllegalStateException("Failed to upload file to Amazon S3.",e);
