@@ -9,4 +9,5 @@ public class Constants {
     public static final String ApplicationName ="ShreyasSpring";
     public static final String ApplicationURL= AppConstant.GetApplicationURL();
     public static final String VerificationAPI="user/verification/";
+    public static final String AWSS3ProfileImagePrefix="ProfileImages_";
 }

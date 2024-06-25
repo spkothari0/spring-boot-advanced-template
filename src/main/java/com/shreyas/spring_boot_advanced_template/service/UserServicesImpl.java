@@ -86,8 +86,8 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
     }
 
     public String verifyUser(String token) {
-        Date currentTime=new Date();
-        boolean isExpired= currentTime.after(jwtUtils.getExpirationDateFromToken(token));
+        Date currentTime = new Date();
+        boolean isExpired = currentTime.after(jwtUtils.getExpirationDateFromToken(token));
         String username = jwtUtils.getUsernameFromToken(token);
         if (username == null || isExpired) {
             return verificationFailed();
@@ -103,23 +103,23 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
 
     }
 
-    public boolean uploadProfileImage(String username, MultipartFile file){
+    public boolean uploadProfileImage(String username, MultipartFile file) {
         Optional<User> u = userRepo.findByUsername(username);
         if (u.isEmpty()) {
             throw new UsernameNotFoundException("User with username: " + username + " not found!");
         }
         User user = u.get();
-        if(!AppConstant.AWSServiceEnabled()){
+        if (!AppConstant.AWSServiceEnabled()) {
             log.warn("AWS services are disabled ! Please enable them to continue.");
             return false;
         }
-        String path="profileImages_"+username+"/";
-        boolean fileName = storageService.saveFile(path,file.getName(),file);
-        if(fileName){
-            user.setProfileImageName(path+file.getName());
+        String path = Constants.AWSS3ProfileImagePrefix + username + "/";
+        boolean fileName = storageService.saveFile(path, file.getName(), file);
+        if (fileName) {
+            user.setProfileImageName(path + file.getName());
             userRepo.save(user);
             return true;
-        } else{
+        } else {
             return false;
         }
     }

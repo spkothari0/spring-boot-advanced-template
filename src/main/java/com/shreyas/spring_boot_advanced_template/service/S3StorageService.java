@@ -1,7 +1,10 @@
 package com.shreyas.spring_boot_advanced_template.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import com.shreyas.spring_boot_advanced_template.AppConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -34,49 +37,48 @@ public class S3StorageService {
         return true;
     }
 
-    public boolean saveFile(String path, String filename, MultipartFile file){
-        try{
-            if(file.isEmpty())
+    public boolean saveFile(String path, String filename, MultipartFile file) {
+        try {
+            if (file.isEmpty())
                 throw new IllegalArgumentException("File must not be empty");
 
-            PutObjectResult result = s3Client.putObject(bucketName,path+filename,convertMultipartFileToFile(file));
+            PutObjectResult result = s3Client.putObject(bucketName, path + filename, convertMultipartFileToFile(file));
             return result != null;
-        }catch (AmazonS3Exception e){
+        } catch (AmazonS3Exception e) {
             log.error("Failed to upload file", e);
-            throw new IllegalStateException("Failed to upload file to Amazon S3.",e);
+            throw new IllegalStateException("Failed to upload file to Amazon S3.", e);
         }
     }
 
-    public boolean saveFile(String path, String filename, Optional<Map<String,String>> optionalMetaData, InputStream inputStream){
+    public boolean saveFile(String path, String filename, Optional<Map<String, String>> optionalMetaData, InputStream inputStream) {
         ObjectMetadata metadata = new ObjectMetadata();
-        optionalMetaData.ifPresent(map->{
+        optionalMetaData.ifPresent(map -> {
             map.forEach(metadata::addUserMetadata);
         });
-        try{
-            s3Client.putObject(bucketName, path+filename, inputStream, metadata);
-        } catch (AmazonS3Exception e){
+        try {
+            s3Client.putObject(bucketName, path + filename, inputStream, metadata);
+        } catch (AmazonS3Exception e) {
             log.error("Failed to upload file", e);
-            throw new IllegalStateException("Failed to upload file to Amazon S3.",e);
+            throw new IllegalStateException("Failed to upload file to Amazon S3.", e);
         }
         return true;
     }
 
-    public byte[] downloadFile(String fileName){
-        S3Object s3Object = s3Client.getObject(bucketName,fileName);
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
-        try{
-            return IOUtils.toByteArray(inputStream);
-        }catch (IOException e){
+    public byte[] downloadFile(String fileName) {
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+        try {
+            return IOUtils.toByteArray(s3Object.getObjectContent());
+        } catch (IOException e) {
             log.error("Failed to retrieve file from S3 Object{}", fileName, e);
             return null;
         }
     }
 
-    public boolean deleteFile(String fileName){
+    public boolean deleteFile(String fileName) {
         try {
             s3Client.deleteObject(bucketName, fileName);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Failed to delete file from S3 Object{}", fileName, e);
             return false;
         }
