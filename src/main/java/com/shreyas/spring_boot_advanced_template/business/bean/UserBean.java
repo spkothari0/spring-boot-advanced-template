@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -67,4 +68,16 @@ public class UserBean {
     }
 
     public UserBean() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserBean userBean)) return false;
+        return Objects.equals(id, userBean.id) && Objects.equals(email, userBean.email) && Objects.equals(username, userBean.username) && Objects.equals(isEnabled, userBean.isEnabled);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -1,5 +1,6 @@
 package com.shreyas.spring_boot_advanced_template.service;
 
+import com.shreyas.spring_boot_advanced_template.AppConstant;
 import com.shreyas.spring_boot_advanced_template.Utility.GenericBeanMapper;
 import com.shreyas.spring_boot_advanced_template.business.bean.UserBean;
 import com.shreyas.spring_boot_advanced_template.entity.Constants.RoleType;
@@ -10,17 +11,20 @@ import com.shreyas.spring_boot_advanced_template.repository.interfaces.IRoleRepo
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IUserRepo;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IEmailService;
 import com.shreyas.spring_boot_advanced_template.service.interfaces.IUserServices;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserServicesImpl implements UserDetailsService, IUserServices {
 
     private final IUserRepo userRepo;
@@ -28,14 +32,18 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
     private final PasswordEncoder passwordEncoder;
     private final IEmailService emailService;
     private final JwtUtils jwtUtils;
+    private final S3StorageService storageService;
+    private final AppConstant appConstant;
 
     @Autowired
-    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils) {
+    public UserServicesImpl(IUserRepo userRepo, IRoleRepo roleRepo, PasswordEncoder passwordEncoder, IEmailService emailService, JwtUtils jwtUtils, S3StorageService storageService, AppConstant appConstant) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.jwtUtils = jwtUtils;
+        this.storageService = storageService;
+        this.appConstant = appConstant;
     }
 
     @Override
@@ -95,6 +103,27 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
 
         return verificationSuccess(user.getFirstName());
 
+    }
+
+    public boolean uploadProfileImage(String username, MultipartFile file){
+        Optional<User> u = userRepo.findByUsername(username);
+        if (u.isEmpty()) {
+            throw new UsernameNotFoundException("User with username: " + username + " not found!");
+        }
+        User user = u.get();
+        if(!appConstant.AWSServiceEnabled()){
+            log.warn("AWS services are disabled ! Please enable them to continue.");
+            return false;
+        }
+        String path="profileImages_"+username+"/";
+        boolean fileName = storageService.saveFile(path,file.getName(),file);
+        if(fileName){
+            user.setProfileImageName(path+file.getName());
+            userRepo.save(user);
+            return true;
+        } else{
+            return false;
+        }
     }
 
     private UserBean saveUser(UserBean userBean) {

@@ -19,16 +19,20 @@ public class InitialDataSetup implements CommandLineRunner {
     private final IRoleRepo roleRepo;
     private final IUserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final AppConstant appConstant;
 
     @Autowired
-    public InitialDataSetup(IRoleRepo roleRepo, IUserRepo userRepository, PasswordEncoder passwordEncoder) {
+    public InitialDataSetup(IRoleRepo roleRepo, IUserRepo userRepository, PasswordEncoder passwordEncoder, AppConstant appConstant) {
         this.roleRepo = roleRepo;
         this.userRepo = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.appConstant = appConstant;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        if(!appConstant.RunStartupFile())
+            return;
         createRoleIfNotFound(RoleType.ROLE_ADMIN);
         createRoleIfNotFound(RoleType.ROLE_STUDENT);
         createRoleIfNotFound(RoleType.ROLE_TEACHER);

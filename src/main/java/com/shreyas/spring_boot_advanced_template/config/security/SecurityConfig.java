@@ -34,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter, CorrelationIdFilter correlationIdFilter, CacheFilter cacheFilter) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/v*/auth/**").permitAll()
+                        .requestMatchers("/api/v*/user/verification/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

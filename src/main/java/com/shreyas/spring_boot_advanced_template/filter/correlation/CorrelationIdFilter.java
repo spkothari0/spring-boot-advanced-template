@@ -23,7 +23,7 @@ public class CorrelationIdFilter implements Filter {
             "/swagger-resources.*",
             "/swagger-ui.html.*",
             "/webjars/.*",
-            "/api/v1/auth/verification/.*");
+            "/api/v1/user/verification/.*");
 
     private static List<Pattern> compilePatterns(List<String> paths) {
         return paths.stream()

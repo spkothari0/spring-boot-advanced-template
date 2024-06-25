@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -58,6 +59,7 @@ public class User implements UserDetails {
 
     private Boolean isLocked = true;
     private Boolean isEnabled = true;
+    private String profileImageName;
 
     public User(String firstName, String lastName, String email, String password, String username, Role role,LocalDate dob, Boolean isLocked, Boolean isEnabled) {
         this.firstName = firstName;
@@ -79,6 +81,18 @@ public class User implements UserDetails {
         this.username = username;
         this.role = role;
         this.dob = dob;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     /**
