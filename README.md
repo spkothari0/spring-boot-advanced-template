@@ -1,0 +1,3 @@
+This Branch contains Authentication, authorization, Role-based authorization, Spring Security, Swagger (Controller name Customization i.e. instead of "student-controller", it will show as "Student" on the Swagger IU), and JWT integration.
+Along with the above old changes, this also contains Custom User Creation. Controller caching using Redis, Correlation ID. Cache handling using cache controller. Multiple profile setup with ability to fetch data from different env.
+Users are created using a custom user class which needs verification from the link sent as a verification mail sent to their email ID using SMTP servers.
