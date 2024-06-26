@@ -6,7 +6,7 @@ import com.shreyas.spring_boot_advanced_template.business.bean.UserBean;
 import com.shreyas.spring_boot_advanced_template.entity.Constants.RoleType;
 import com.shreyas.spring_boot_advanced_template.entity.Role;
 import com.shreyas.spring_boot_advanced_template.entity.User;
-import com.shreyas.spring_boot_advanced_template.jwt.JwtUtils;
+import com.shreyas.spring_boot_advanced_template.filter.jwt.JwtUtils;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IRoleRepo;
 import com.shreyas.spring_boot_advanced_template.repository.interfaces.IUserRepo;
 import com.shreyas.spring_boot_advanced_template.service.Constants;

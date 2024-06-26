@@ -2,7 +2,7 @@ package com.shreyas.spring_boot_advanced_template.controller;
 
 import com.shreyas.spring_boot_advanced_template.business.bean.LoginRequest;
 import com.shreyas.spring_boot_advanced_template.business.bean.LoginResponse;
-import com.shreyas.spring_boot_advanced_template.jwt.JwtUtils;
+import com.shreyas.spring_boot_advanced_template.filter.jwt.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;

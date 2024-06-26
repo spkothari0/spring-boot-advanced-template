@@ -26,7 +26,7 @@ public class LoginResponse {
     @Override
     public String toString() {
         return "LoginResponse{" +
-                "jwtToken=hidden'" +  + '\'' +
+                "jwtToken=hidden" +  + '\'' +
                 ", username='" + username + '\'' +
                 ", roles=" + roles.toString() +
                 '}';

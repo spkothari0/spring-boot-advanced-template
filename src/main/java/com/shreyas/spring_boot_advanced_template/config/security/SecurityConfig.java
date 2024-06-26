@@ -2,8 +2,8 @@ package com.shreyas.spring_boot_advanced_template.config.security;
 
 import com.shreyas.spring_boot_advanced_template.filter.cache.CacheFilter;
 import com.shreyas.spring_boot_advanced_template.filter.correlation.CorrelationIdFilter;
-import com.shreyas.spring_boot_advanced_template.jwt.AuthEntryPointJwt;
-import com.shreyas.spring_boot_advanced_template.jwt.AuthTokenFilter;
+import com.shreyas.spring_boot_advanced_template.filter.jwt.AuthEntryPointJwt;
+import com.shreyas.spring_boot_advanced_template.filter.jwt.AuthTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
