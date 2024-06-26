@@ -1,4 +1,4 @@
-package com.shreyas.spring_boot_advanced_template.jwt;
+package com.shreyas.spring_boot_advanced_template.filter.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
