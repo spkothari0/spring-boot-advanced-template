@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtUtils.generateTokenFromUsername(userDetails);
+        String token = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         LoginResponse loginResponse = new LoginResponse(token, userDetails.getUsername(), roles);

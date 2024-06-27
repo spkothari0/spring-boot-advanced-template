@@ -146,7 +146,7 @@ public class UserServicesImpl implements UserDetailsService, IUserServices {
     }
 
     private void sendVerificationMail(User user) {
-        String link = Constants.ApplicationURL + Constants.VerificationAPI + jwtUtils.generateTokenFromUsername(user);
+        String link = Constants.ApplicationURL + Constants.VerificationAPI + jwtUtils.generateTokenFromUsername(user.getUsername());
         emailService.sendEmail(user.getEmail(), Constants.ApplicationName + " Account Verification Email", buildEmail(user.getFirstName(), link));
     }
 
