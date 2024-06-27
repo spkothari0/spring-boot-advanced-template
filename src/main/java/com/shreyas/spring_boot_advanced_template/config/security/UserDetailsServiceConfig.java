@@ -25,38 +25,4 @@ public class UserDetailsServiceConfig {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         return daoAuthenticationProvider;
     }
-
-
-    // before this once run: Create user schema present in user.sql
-//    @Bean
-//    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-//
-//        if (!userExists(jdbcUserDetailsManager, "shreyas")) {
-//            UserDetails user = User.withUsername("shreyas")
-//                    .password(passwordEncoder.encode("123"))
-//                    .roles("USER")
-//                    .build();
-//            jdbcUserDetailsManager.createUser(user);
-//        }
-//
-//        if (!userExists(jdbcUserDetailsManager, "admin")) {
-//            UserDetails user = User.withUsername("admin")
-//                    .password(passwordEncoder.encode("admin"))
-//                    .roles("ADMIN")
-//                    .build();
-//            jdbcUserDetailsManager.createUser(user);
-//        }
-//
-//        return jdbcUserDetailsManager;
-//    }
-
-//    private boolean userExists(JdbcUserDetailsManager jdbcUserDetailsManager, String username) {
-//        try {
-//            jdbcUserDetailsManager.loadUserByUsername(username);
-//            return true;
-//        } catch (UsernameNotFoundException e) {
-//            return false;
-//        }
-//    }
 }
