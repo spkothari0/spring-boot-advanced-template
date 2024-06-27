@@ -8,12 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class UserDetailsServiceConfig {
-//    private final DataSource dataSource;
     private final PasswordEncoder passwordEncoder;
     private final UserServicesImpl userService;
 
     public UserDetailsServiceConfig(PasswordEncoder passwordEncoder, UserServicesImpl user) {
-//        this.dataSource = dataSource;
         this.passwordEncoder = passwordEncoder;
         this.userService = user;
     }
