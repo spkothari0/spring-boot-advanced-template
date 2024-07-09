@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +23,6 @@ import java.util.UUID;
                 @UniqueConstraint(columnNames = "email"),
                 @UniqueConstraint(columnNames = "username")
         })
-@EqualsAndHashCode
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
@@ -102,8 +100,7 @@ public class User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName().toString());
-        return Collections.singletonList(authority);
+        return List.of(new SimpleGrantedAuthority(role.getRoleName().toString()));
     }
 
     /**
