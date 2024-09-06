@@ -71,3 +71,9 @@ mvn spring-boot:run
 
 ### API Documentation
 The Swagger UI can be accessed at `http://localhost:8080/swagger-ui.html`, where you can explore and test the available APIs.
+
+## Additional Resources
+
+For a detailed checklist of the key components integrated and to be implemented in the future into this project, please refer to the [Project Checklist PDF](./Checklist%20for%20Advanced%20Spring%20Boot%20Template%20Application.pdf).
+
+
