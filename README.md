@@ -37,7 +37,7 @@ This project is a comprehensive Spring Boot template designed to serve as a robu
 
 ### 10. Email Integration
 - **Spring Email:** Configured email sending using Spring Email to facilitate user notifications, such as account activation and password reset emails.
-- 
+
 ### 11. WebSocket Support
 - **Spring WebSocket:** Implemented real-time communication using WebSockets. Though not utilized in the current project, the WebSocket configuration is ready for future extensions.
 
